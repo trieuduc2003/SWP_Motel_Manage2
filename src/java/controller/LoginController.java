@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
-import model.enums.Role;
 import static model.enums.Role.USER;
 import model.enums.Status;
 
@@ -42,18 +41,7 @@ public class LoginController extends HttpServlet {
 
         //Check Email and Password in database:
         UserDAO userDAO = new UserDAO();
-        User user = userDAO.getUserByEmailAndPassword(email, password);
-        System.out.println(email + " " + password);
-
-// Kiểm tra xem user có tồn tại hay không
-        if (user != null) {
-            user.setStatus(Status.ACTIVE); // Thay đổi status của user thành ACTIVE
-            System.out.println("User status updated to ACTIVE");
-        } else {
-            System.out.println("User not found with the given email and password.");
-        }
-
-        System.out.println(user);
+        User user = userDAO.getUserByEmailAndPassword(email, password);System.out.println(email +" "+password);
         if (user == null) {
             session.setAttribute("notificationErr", "The e-mail address and/or password you specified are not correct.");
             response.sendRedirect("login");
@@ -71,8 +59,7 @@ public class LoginController extends HttpServlet {
                 case STAFF ->
                     response.sendRedirect("staff/dashboard");
                 case ADMIN ->
-//                    response.sendRedirect("admin/dashboard");
-                    response.sendRedirect("home");
+                    response.sendRedirect("admin/dashboard");
                 default ->
                     response.sendRedirect("home");
             }

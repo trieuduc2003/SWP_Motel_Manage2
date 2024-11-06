@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import model.User;
 import model.enums.Role;
 import model.enums.Status;
@@ -83,48 +81,31 @@ public class UserDAO extends DBContext {
     }
 
     public User getUserByEmailAndPassword(String email, String password) {
-    String sql = "SELECT * FROM USERS WHERE email = ? AND password = ?";
-    User user = null;
-    
-    try (Connection con = DBContext.getConnection(); 
-         PreparedStatement ps = con.prepareStatement(sql)) {
-        
-        ps.setString(1, email);
-        ps.setString(2, password);
-        ResultSet rs = ps.executeQuery();
-        
-        if (rs.next()) {
-            user = new User();
-            user.setId(rs.getInt("User_id"));
-            user.setEmail(rs.getString("email"));
-            user.setName(rs.getString("User_Name"));
-            user.setPhone(rs.getString("Phone_Num"));
-            user.setPassword(rs.getString("Password"));
-            user.setStatus(Status.ACTIVE);
-            
-            // Kiểm tra và gán giá trị role
-            try {
+        String sql = """
+                    SELECT * FROM USERS WHERE  email = ? AND password = ?
+                     """;
+        Connection con;
+        try {
+            con = DBContext.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("User_id"));
+                user.setEmail(rs.getString("email"));
+                user.setName(rs.getString("User_Name"));
+                user.setPhone(rs.getString("Phone_Num"));
                 user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid role: " + rs.getString("role"));
-                user.setRole(Role.USER); // Gán giá trị mặc định nếu không hợp lệ
-            }
-            
-            // Kiểm tra và gán giá trị status
-            try {
                 user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid status: " + rs.getString("status"));
-                user.setStatus(Status.ACTIVE); // Gán giá trị mặc định nếu không hợp lệ
+                return user;
             }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    } catch (SQLException e) {
-        System.out.println("Error fetching user: " + e.getMessage());
+        return null;
     }
-    
-    return user;  // Trả về đối tượng user hoặc null nếu không tìm thấy
-}
-
 
     public boolean insertUser(User user) {
         String sql = "INSERT INTO USERS (User_Name, email, password, Phone_Num, role, status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -144,73 +125,6 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public User getUser(int userId) {
-        String query = "SELECT * FROM Users WHERE User_id = ?";
-        User user = null;
-        try (Connection con = DBContext.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                user = new User();
-                user.setId(rs.getInt("User_id"));
-                user.setEmail(rs.getString("email"));
-                user.setName(rs.getString("User_Name"));
-                user.setPhone(rs.getString("Phone_Num"));
-                user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
-                user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error fetching user: " + ex.getMessage());
-        }
-        return user;  // Return the user object or null if not found
-    }
-
-    // Method to get all Users
-    public List<User> getAllUsers() {
-        String query = "SELECT * FROM Users";
-        List<User> userList = new ArrayList<>();
-
-        try (Connection con = DBContext.getConnection(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("User_id"));
-                user.setName(rs.getString("User_Name"));
-                user.setEmail(rs.getString("email"));
-                user.setPhone(rs.getString("Phone_Num"));
-                user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
-                user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
-                userList.add(user); // Add the user to the list
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error fetching all users: " + ex.getMessage());
-        }
-
-        return userList;  // Return the list of users
-    }
-
-    // Method to update a User
-    public boolean updateUser(User user) {
-        String query = "UPDATE users SET User_Name = ?,  Role = ?, Email = ?, Phone_Num = ? WHERE User_id = ?";
-        try (Connection connection = DBContext.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            // Thiết lập các giá trị tham số cho câu truy vấn
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getRole().toString()); // Giả sử Role là một enum
-            preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, user.getPhone());
-//            preparedStatement.setString(5, user.getStatus().toString()); // Giả sử Status là một enum
-            preparedStatement.setInt(5, user.getId());
-
-            // Thực thi câu truy vấn
-            int rowsAffected = preparedStatement.executeUpdate();
-            return rowsAffected > 0; // Trả về true nếu có ít nhất một dòng bị ảnh hưởng
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public boolean activateUserByEmail(String email) {
         String sql = "UPDATE USERS SET status = ?  WHERE email = ?";
         try (Connection con = DBContext.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -226,13 +140,6 @@ public class UserDAO extends DBContext {
 
     public static void main(String[] args) {
         UserDAO udao = new UserDAO();
-        System.out.println(udao.getUserByEmailAndPassword("admin@example.com", "admin123"));
-        User user = new User();
-        user.setEmail("user001@example.com");
-        user.setPhone("0333333333");
-        user.setName("user11");
-        user.setRole(Role.USER);
-        user.setId(3);
-        System.out.println(udao.updateUser(user));
+        System.out.println(udao.getUserByEmailAndPassword("staff1@motel.com", "staff123"));
     }
 }
