@@ -5,9 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBContext {
-    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=motel3"; // Cấu trúc URL cho SQL Server
+    protected static Connection connection;
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=motel2"; // Cấu trúc URL cho SQL Server
     private static final String USER = "sa"; // Người dùng SQL Server
-    private static final String PASSWORD = "sa"; // Mật khẩu của bạn
+    private static final String PASSWORD = "123"; // Mật khẩu của bạn
 
     static {
         try {
@@ -19,7 +20,9 @@ public class DBContext {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        return connection;
+        
     }
 
     public static void main(String[] args) throws SQLException {
@@ -27,3 +30,23 @@ public class DBContext {
         System.out.println("Connection successful: " + con);
     }
 }
+
+
+
+//public class DBContext {
+//
+//    protected Connection connection;
+//
+//    public DBContext() {
+//        try {
+//            // Edit URL , username, password to authenticate with your MS SQL Server
+//            String url = "jdbc:sqlserver://localhost:1433;databaseName=motel2";
+//            String username = "sa";
+//            String password = "123";
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//            connection = DriverManager.getConnection(url, username, password);
+//        } catch (ClassNotFoundException | SQLException ex) {
+//            System.out.println(ex);
+//        }
+//    }
+//}
