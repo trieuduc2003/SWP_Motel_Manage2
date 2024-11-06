@@ -3,15 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/dal/UserDAO.java</file>
-            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/dal/DBContext.java</file>
+            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/dal/RoomDAO.java</file>
             <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/web/admin/user-list.jsp</file>
-            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/web/admin/dashboard.jsp</file>
-            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/controller/admin/AdminDashboard.java</file>
-            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/model/User.java</file>
-            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/controller/admin/UserManagementController.java</file>
-            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/model/enums/Status.java</file>
-            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/web/admin/header.jsp</file>
+            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/web/staff/contract-management.jsp</file>
+            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/dal/RentContactDAO.java</file>
+            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/dal/ContractDAO.java</file>
+            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/dal/DBContext.java</file>
+            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/model/RentContact.java</file>
+            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/controller/staff/ContractManagementController.java</file>
+            <file>file:/D:/FALL2024/Thanh2/SWP391_Motel/src/java/controller/staff/RenContactManagementController.java</file>
         </group>
     </open-files>
 </project-private>

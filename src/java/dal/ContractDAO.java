@@ -168,4 +168,27 @@ public class ContractDAO extends DBContext {
             }
         }
     }
+    public List<Contract> Paging(List<Contract> contracts, int page, int pageSize) {
+        int fromIndex = (page - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, contracts.size());
+
+        if (fromIndex > toIndex) {
+            // Handle the case where fromIndex is greater than toIndex
+            fromIndex = toIndex;
+        }
+
+        return contracts.subList(fromIndex, toIndex);
+    }
+    public boolean isRoomAlreadyRented(int roomId) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM Contract WHERE Room_id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, roomId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // Return true if the count is greater than 0
+        }
+    }
+    return false;
+}
+
 }

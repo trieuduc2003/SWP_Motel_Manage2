@@ -34,7 +34,7 @@
     </c:if>
 
     <!-- Add New Contract Button -->
-    <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addContractModal">Add New Contract</button>
+    <!--<button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addContractModal">Add New Contract</button>-->
 
     <!-- Contract List Table -->
     <div class="table-responsive">
@@ -58,10 +58,10 @@
                     <tr>
                         <td>${status.index + 1}</td>
                         <td>${contract.motel.name}</td>
-                        <td>${contract.room.roomType.name}</td>
+                        <td>${contract.room.id}</td>
                         <td>${contract.user.name}</td>
-                          <td><fmt:formatDate value="${contract.createAt}" pattern="dd/MM/yyyy"/></td>
-                          <td><fmt:formatDate value="${contract.paymentDate}" pattern="dd/MM/yyyy"/></td>
+                        <td><fmt:formatDate value="${contract.createAt}" pattern="dd/MM/yyyy"/></td>
+                        <td><fmt:formatDate value="${contract.paymentDate}" pattern="dd/MM/yyyy"/></td>
                         <td>${contract.totalPrice}</td>
 
                         <!-- Contract Type with Color -->
@@ -115,7 +115,7 @@
                                     <!-- Room Selection -->
                                     <div class="form-group">
                                         <label for="editRoomId${contract.id}">Select Room</label>
-                                        <select id="editRoomId${contract.id}" name="roomId" class="form-control" required>
+                                        <select id="editRoomId${contract.id}" name="roomId" class="form-control" disabled>
                                             <option value="">-- Select Room --</option>
                                             <c:forEach var="room" items="${rooms}">
                                                 <option value="${room.id}" ${room.id == contract.room.id ? 'selected' : ''}>${room.roomType.name} - ${room.motel.name}</option>
@@ -126,7 +126,7 @@
                                     <!-- User Selection -->
                                     <div class="form-group">
                                         <label for="editUserId${contract.id}">Select User</label>
-                                        <select id="editUserId${contract.id}" name="userId" class="form-control" required>
+                                        <select id="editUserId${contract.id}" name="userId" class="form-control" disabled>
                                             <option value="">-- Select User --</option>
                                             <c:forEach var="user" items="${users}">
                                                 <option value="${user.id}" ${user.id == contract.user.id ? 'selected' : ''}>${user.name}</option>
@@ -193,17 +193,17 @@
         <ul class="pagination justify-content-center">
             <c:if test="${currentPage > 1}">
                 <li class="page-item">
-                    <a class="page-link" href="?page=${currentPage - 1}">Previous</a>
+                    <a class="page-link" href="?page=${currentPage - 1}&status=${param.status}&search=${param.search}">Previous</a>
                 </li>
             </c:if>
             <c:forEach var="pageNum" begin="1" end="${totalPages}">
                 <li class="page-item ${pageNum == currentPage ? 'active' : ''}">
-                    <a class="page-link" href="?page=${pageNum}">${pageNum}</a>
+                    <a class="page-link" href="?page=${pageNum}&status=${param.status}&search=${param.search}">${pageNum}</a>
                 </li>
             </c:forEach>
             <c:if test="${currentPage < totalPages}">
                 <li class="page-item">
-                    <a class="page-link" href="?page=${currentPage + 1}">Next</a>
+                    <a class="page-link" href="?page=${currentPage + 1}&status=${param.status}&search=${param.search}">Next</a>
                 </li>
             </c:if>
         </ul>

@@ -45,7 +45,7 @@ public class UserDAO extends DBContext {
                 user.setEmail(rs.getString("email"));
                 user.setPhone(rs.getString("Phone_Num"));
                 user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
-                
+                user.setCccd(rs.getString("Identity_Id"));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -79,6 +79,7 @@ public class UserDAO extends DBContext {
                 user.setPhone(rs.getString("Phone_Num"));
                 user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
                 user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                   user.setCccd(rs.getString("Identity_Id"));
                 return user;
             }
         } catch (SQLException e) {
@@ -100,6 +101,7 @@ public class UserDAO extends DBContext {
                 user.setPhone(rs.getString("Phone_Num"));
                 user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
                 user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                   user.setCccd(rs.getString("Identity_Id"));
                 return user;
             }
         } catch (SQLException e) {
@@ -142,6 +144,7 @@ public class UserDAO extends DBContext {
                 user.setPhone(rs.getString("Phone_Num"));
                 user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
                 user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                   user.setCccd(rs.getString("Identity_Id"));
                 return user;
             }
         } catch (SQLException e) {
@@ -212,6 +215,7 @@ public class UserDAO extends DBContext {
                     user.setPhone(rs.getString("Phone_Num"));
                     user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
                     user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                       user.setCccd(rs.getString("Identity_Id"));
                     users.add(user);
                 }
             }
@@ -264,7 +268,25 @@ public class UserDAO extends DBContext {
             }
         }
     }
-    
+    public boolean insertUser2(User user) {
+    String sql = "INSERT INTO USERS (User_Name, email, password, Phone_Num, role, status, Identity_Id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, user.getName());
+        ps.setString(2, user.getEmail());
+        ps.setString(3, user.getPassword());
+        ps.setString(4, user.getPhone());
+        ps.setString(5, user.getRole().name().toUpperCase());
+        ps.setString(6, user.getStatus().name().toUpperCase());
+        ps.setString(7, user.getCccd()); // Set the CCD field
+
+        int rowsInserted = ps.executeUpdate();
+        return rowsInserted > 0;  // Return true if the insertion is successful
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
     public static void main(String[] args) {
         UserDAO udao = new UserDAO();
         List<User> list = udao.getAllUsers();
