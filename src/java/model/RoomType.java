@@ -4,21 +4,32 @@
  */
 package model;
 
+/**
+ *
+ * @author ADMIN
+ */
 public class RoomType {
-    private int typeId;
+    private int id;
     private String name;
     private String description;
-    private int maxGuest;
-    private double price;
-    private double discount;
+    private int max_user;
 
-    // Getters and Setters
-    public int getTypeId() {
-        return typeId;
+    public RoomType() {
     }
 
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
+    public RoomType(int id, String name, String description, int max_user) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.max_user = max_user;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -37,33 +48,12 @@ public class RoomType {
         this.description = description;
     }
 
-    public int getMaxGuest() {
-        return maxGuest;
+    public int getMax_user() {
+        return max_user;
     }
 
-    public void setMaxGuest(int maxGuest) {
-        this.maxGuest = maxGuest;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
-    @Override
-    public String toString() {
-        return "RoomType{" + "typeId=" + typeId + ", name=" + name + ", description=" + description + ", maxGuest=" + maxGuest + ", price=" + price + ", discount=" + discount + '}';
+    public void setMax_user(int max_user) {
+        this.max_user = max_user;
     }
     
 }

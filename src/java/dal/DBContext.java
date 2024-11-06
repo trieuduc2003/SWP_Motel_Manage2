@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBContext {
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=motel3"; // Cấu trúc URL cho SQL Server
     private static final String USER = "sa"; // Người dùng SQL Server
-    private static final String PASSWORD = "sa"; // Mật khẩu của bạn
+    private static final String PASSWORD = "123"; // Mật khẩu của bạn
 
     static {
         try {

@@ -1,198 +1,190 @@
 package dal;
 
+import model.Room;
+import model.Categories;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.Room;
+import model.Motel;
 import model.RoomType;
 
 public class RoomDAO extends DBContext {
 
-    // Add a new room
-public boolean addRoom(Room room) {
-    String sql = "INSERT INTO Room (Motel_id, Type_id) VALUES (?, ?)";
-    try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-        ps.setInt(1, room.getMotelId());
-        ps.setInt(2, room.getTypeId());
-        return ps.executeUpdate() > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    }
-}
+    final MotelDAO motelDAO = new MotelDAO();
 
-
-
-    // Get all rooms by motel ID
-    public List<Room> getAllRoomsByMotelId(int motelId) {
+   // Retrieve all rooms with their associated room types, motel names, and images
+    public List<Room> getAllRooms() throws SQLException {
         List<Room> rooms = new ArrayList<>();
-        String sql = "SELECT * FROM Room WHERE Motel_id = ?";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, motelId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Room room = new Room();
-                    room.setRoomId(rs.getInt("Room_id"));
-                    room.setMotelId(rs.getInt("Motel_id"));
-                    room.setTypeId(rs.getInt("Type_id"));
-                    rooms.add(room);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String query = "SELECT Room.Room_id, Room.Motel_id, Room.Type_id, Room_Type.Name AS roomTypeName, "
+                + "Motels.Motel_name AS motelName, Room.Image_Url AS imageUrl, Room.Status AS status, Room.Price AS price " // Thêm cột price
+                + "FROM Room "
+                + "JOIN Room_Type ON Room.Type_id = Room_Type.Type_id "
+                + "JOIN Motels ON Room.Motel_id = Motels.Motel_id";
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query);
+
+        while (rs.next()) {
+            Room room = new Room(
+                    rs.getInt("Room_id"),
+                    rs.getInt("Motel_id"),
+                    rs.getInt("Type_id"),
+                    rs.getString("imageUrl"),
+                    rs.getString("motelName"),
+                    rs.getString("roomTypeName"),
+                    rs.getString("status"),
+                    rs.getDouble("price") // Lấy giá trị price
+            );
+            rooms.add(room);
+            System.out.println(room);
         }
         return rooms;
     }
 
-    // Get a room by ID
-    public Room getRoomById(int roomId) {
-        Room room = null;
-        String sql = "SELECT * FROM Room WHERE Room_id = ?";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, roomId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    room = new Room();
-                    room.setRoomId(rs.getInt("Room_id"));
-                    room.setMotelId(rs.getInt("Motel_id"));
-                    room.setTypeId(rs.getInt("Type_id"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+// Thay đổi trong phương thức searchRooms  
+    public List<Room> searchRooms(Integer motelId, String typeName) throws SQLException {
+        List<Room> rooms = new ArrayList<>();
+        StringBuilder query = new StringBuilder(
+                "SELECT Room.Room_id, Room.Motel_id, Room.Type_id, Room_Type.Name AS roomTypeName, "
+                + "Motels.Motel_name AS motelName, Room.Image_Url AS imageUrl, Room.Status AS status, Room.Price AS price " // Lấy trạng thái từ bảng Room  
+                + "FROM Room "
+                + "JOIN Room_Type ON Room.Type_id = Room_Type.Type_id "
+                + "JOIN Motels ON Room.Motel_id = Motels.Motel_id "
+                + "WHERE 1=1"
+        );
+
+        // Thêm các điều kiện tìm kiếm nếu có  
+        if (motelId != null) {
+            query.append(" AND Room.Motel_id = ?");
         }
-        return room;
+        if (typeName != null && !typeName.isEmpty()) {
+            query.append(" AND Room_Type.Name LIKE ?");
+        }
+
+        PreparedStatement ps = connection.prepareStatement(query.toString());
+
+        int index = 1;
+        if (motelId != null) {
+            ps.setInt(index++, motelId);
+        }
+        if (typeName != null && !typeName.isEmpty()) {
+            ps.setString(index++, "%" + typeName + "%");
+        }
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Room room = new Room(
+                    rs.getInt("Room_id"),
+                    rs.getInt("Motel_id"),
+                    rs.getInt("Type_id"),
+                    rs.getString("imageUrl"),
+                    rs.getString("motelName"),
+                    rs.getString("roomTypeName"),
+                    rs.getString("status"),
+                    rs.getDouble("price") // Lấy giá trị price
+            );
+            rooms.add(room);
+        }
+
+        return rooms;
     }
 
-    // Update room details
-    public boolean updateRoom(Room room) {
-        String sql = "UPDATE Room SET Type_id = ? WHERE Room_id = ?";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, room.getTypeId());
-            ps.setInt(2, room.getRoomId());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+    // Bạn có thể bổ sung các phương thức khác như getRoomById nếu cần  
+    // Fetch room details by ID
+    public Room getRoomById(int roomId) throws SQLException {
+        String query = "SELECT Room.Room_id, Room.Motel_id, Room.Type_Id, Room_Type.Name AS roomTypeName, "
+                + "Motels.Motel_name AS motelName, Room.Image_Url AS imageUrl , Room.Status AS status , Room.Price AS price "
+                + "FROM Room "
+                + "JOIN Room_Type ON Room.Type_Id = Room_Type.Type_id "
+                + "JOIN Motels ON Room.Motel_id = Motels.Motel_id "
+                + "WHERE Room.Room_id = ?";
+
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, roomId); // Sử dụng int cho roomId  
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new Room(
+                    rs.getInt("Room_id"),
+                    rs.getInt("Motel_id"),
+                    rs.getInt("Type_id"),
+                    rs.getString("imageUrl"),
+                    rs.getString("motelName"),
+                    rs.getString("roomTypeName"),
+                    rs.getString("status"),
+                    rs.getDouble("price") // Lấy giá trị price
+            );
+        }
+
+        return null;
+    }
+
+    public void deleteRoom(int roomId) throws SQLException {
+        String query = "DELETE FROM Room WHERE Room_id = ?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, roomId);
+        ps.executeUpdate();
+    }
+
+    public void EditRoom(Room room) throws SQLException {
+    String query = "UPDATE Room SET Type_Id = ?, Image_Url = ?, Status = ?, Price = ? WHERE Room_Id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(query)) {
+        ps.setInt(1, room.gettypeId());
+        ps.setString(2, room.getImageUrl());
+        ps.setString(3, room.getStatus());
+        ps.setDouble(4, room.getPrice());
+        ps.setInt(5, room.getRoomId());
+        ps.executeUpdate();
+    }
+}
+
+
+    public void changeRoomStatus(int roomId, String newStatus) throws SQLException {
+        String query = "UPDATE Room SET status = ? WHERE Room_id = ?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setString(1, newStatus);
+        ps.setInt(2, roomId);
+        ps.executeUpdate();
+    }
+
+   public void addRoom(Room room) throws SQLException {
+    String sql = "INSERT INTO Room (Room_id, Motel_id, Type_Id, Image_Url, Status, Price) VALUES (?, ?, ?, ?, ?, ?)";
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setInt(1, room.getRoomId());
+        statement.setInt(2, room.getMotelId());
+        statement.setInt(3, room.gettypeId());
+        statement.setString(4, room.getImageUrl());
+        statement.setString(5, room.getStatus());
+        statement.setDouble(6, room.getPrice());
+        statement.executeUpdate();
+    }
+}
+
+
+    // Đảm bảo đóng kết nối sau khi sử dụng  
+    public void close() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
         }
     }
 
-    // Delete a room and update the number of rooms
-    public boolean deleteRoom(int roomId) {
-        String sql = "DELETE FROM Room WHERE Room_id = ?";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, roomId);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Get all room types
-    public List<RoomType> getAllRoomTypes() {
-        List<RoomType> roomTypes = new ArrayList<>();
-        String sql = "SELECT * FROM Room_Type";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                RoomType roomType = new RoomType();
-                roomType.setTypeId(rs.getInt("Type_id"));
-                roomType.setName(rs.getString("Name"));
-                roomType.setDescription(rs.getString("Description"));
-                roomType.setMaxGuest(rs.getInt("Max_Guest"));
-                roomType.setPrice(rs.getDouble("Price"));
-                roomType.setDiscount(rs.getDouble("Discount"));
-                roomTypes.add(roomType);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return roomTypes;
-    }
-    
-    // Get room type by ID
-    public RoomType getRoomTypeById(int typeId) {
-        RoomType roomType = null;
-        String sql = "SELECT * FROM Room_Type WHERE Type_id = ?";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+    public List<Categories> getCategoriesByTypeId(int typeId) throws SQLException {
+        List<Categories> categories = new ArrayList<>();
+        String query = "SELECT Category_id, Type_id, Category_Name, Description FROM Categories WHERE Type_id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, typeId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    roomType = new RoomType();
-                    roomType.setTypeId(rs.getInt("Type_id"));
-                    roomType.setName(rs.getString("Name"));
-                    roomType.setDescription(rs.getString("Description"));
-                    roomType.setMaxGuest(rs.getInt("Max_Guest"));
-                    roomType.setPrice(rs.getDouble("Price"));
-                    roomType.setDiscount(rs.getDouble("Discount"));
+                while (rs.next()) {
+                    Categories category = new Categories(
+                        rs.getInt("Category_id"),
+                        rs.getInt("Type_id"),
+                        rs.getString("Category_Name"),
+                        rs.getString("Description")
+                    );
+                    categories.add(category);
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return roomType;
-    }
-
-    // Add a new RoomType
-    public boolean addRoomType(RoomType roomType) {
-        String sql = "INSERT INTO Room_Type (Name, Description, Max_Guest, Price, Discount) VALUES (?, ?, ?, ?, ?)";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, roomType.getName());
-            ps.setString(2, roomType.getDescription());
-            ps.setInt(3, roomType.getMaxGuest());
-            ps.setDouble(4, roomType.getPrice());
-            ps.setDouble(5, roomType.getDiscount());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Update room type details
-    public boolean updateRoomType(RoomType roomType) {
-        String sql = "UPDATE Room_Type SET Name = ?, Description = ?, Max_Guest = ?, Price = ?, Discount = ? WHERE Type_id = ?";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, roomType.getName());
-            ps.setString(2, roomType.getDescription());
-            ps.setInt(3, roomType.getMaxGuest());
-            ps.setDouble(4, roomType.getPrice());
-            ps.setDouble(5, roomType.getDiscount());
-            ps.setInt(6, roomType.getTypeId());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Update room count in the motel
-    public boolean updateRoomCount(int motelId, int delta) {
-        String sql = "UPDATE Motels SET NumberOfRoom = NumberOfRoom + ? WHERE Motel_id = ?";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, delta);
-            ps.setInt(2, motelId);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static void main(String[] args) {
-        RoomDAO dao = new RoomDAO();
-//        List<Room> rooms = dao.getAllRoomsByMotelId(1);
-//        for (Room room : rooms) {
-//            System.out.println(room);
-//        }
-
-        // Test getRoomById
-        Room room = dao.getRoomById(1); // Replace with a valid room ID
-        if (room != null) {
-            System.out.println("Room found: " + room.getRoomId() + " - Type ID: " + room.getTypeId());
-        } else {
-            System.out.println("Room not found.");
-        }
-
+        return categories;
     }
 }
