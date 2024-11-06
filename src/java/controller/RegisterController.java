@@ -34,7 +34,7 @@ public class RegisterController extends HttpServlet {
         String fullname = request.getParameter("fullname");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String confirmPassword = request.getParameter("re-password");
+        String confirmPassword = request.getParameter("re_password");
         String phone = request.getParameter("phone");
 
         // Check if email already exists
@@ -44,7 +44,7 @@ public class RegisterController extends HttpServlet {
             request.setAttribute("phone", phone);
             request.setAttribute("password", password);
             request.setAttribute("email", email);
-            request.setAttribute("re-password", confirmPassword);
+            request.setAttribute("re_password", confirmPassword);
             request.getRequestDispatcher("register.jsp").forward(request, response);
             return;
         }
@@ -56,7 +56,7 @@ public class RegisterController extends HttpServlet {
             request.setAttribute("phone", phone);
             request.setAttribute("password", password);
             request.setAttribute("email", email);
-            request.setAttribute("re-password", confirmPassword);
+            request.setAttribute("re_password", confirmPassword);
             request.getRequestDispatcher("register.jsp").forward(request, response);
             return;
         }

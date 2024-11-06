@@ -5,24 +5,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBContext {
-    private static final String URL = "jdbc:mysql://localhost:3306/motel";
-    private static final String USER = "root";
-    private static final String PASSWORD = "1234"; // Your actual password
 
-    static {
+    protected Connection connection;
+
+    public DBContext() {
         try {
-            // Load the MySQL JDBC driver
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            // Edit URL , username, password to authenticate with your MS SQL Server
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=motel";
+            String username = "sa";
+            String password = "sa";
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection = DriverManager.getConnection(url, username, password);
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println(ex);
         }
-    }
-
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
-    }
-    public static void main(String[] args) throws SQLException {
-        Connection con = getConnection();
-        System.out.println(con);
     }
 }

@@ -1,31 +1,28 @@
 package model;
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 public class Motel {
-    private int motelId;
-    private String motelName;
+    private int id;
+    private String name;
     private String description;
     private String address;
     private String city;
-    private int numberOfRoom;
+    private int numberOfRooms;
 
     // Getters and Setters
-    public int getMotelId() {
-        return motelId;
+    public int getId() {
+        return id;
     }
 
-    public void setMotelId(int motelId) {
-        this.motelId = motelId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getMotelName() {
-        return motelName;
+    public String getName() {
+        return name;
     }
 
-    public void setMotelName(String motelName) {
-        this.motelName = motelName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -52,17 +49,17 @@ public class Motel {
         this.city = city;
     }
 
-    public int getNumberOfRoom() {
-        return numberOfRoom;
+    public int getNumberOfRooms() {
+        return numberOfRooms;
     }
 
-    public void setNumberOfRoom(int numberOfRoom) {
-        this.numberOfRoom = numberOfRoom;
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
     }
 
     @Override
     public String toString() {
-        return "Motel{" + "motelId=" + motelId + ", motelName=" + motelName + ", description=" + description + ", address=" + address + ", city=" + city + ", numberOfRoom=" + numberOfRoom + '}';
+        return "Motel{" + "id=" + id + ", name=" + name + ", description=" + description + ", address=" + address + ", city=" + city + ", numberOfRooms=" + numberOfRooms + '}';
     }
     
 }

@@ -1,64 +1,57 @@
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
+
+import java.util.Date;
+
 public class Contract {
-    private int contractId;          // ID duy nhất của hợp đồng
-    private int userId;              // ID của người dùng
-    private int roomId;              // ID của phòng đã đặt
-    private String createAt;         // Ngày tạo hợp đồng
-    private int motelId;             // ID của khách sạn
-    private double totalPrice;        // Tổng giá của hợp đồng
-    private String paymentMethod;     // Phương thức thanh toán
-    private String paymentStatus;     // Trạng thái thanh toán
-    private String paymentDate;       // Ngày thanh toán
-    private String typeOfContract;    // Loại hợp đồng
-    private String checkInDate;       // Ngày nhận phòng
-    private String checkOutDate;      // Ngày trả phòng
+    private int id;
+    private Room room;
+    private User user;
+    private Motel motel;
+    private double totalPrice;
+    private String paymentMethod;
+    private String paymentStatus;
+    private Date paymentDate;
+    private String typeOfContract;
+    private Date createAt;
 
-    // Getter và Setter cho tất cả các thuộc tính, bao gồm checkInDate và checkOutDate
-
-    public int getContractId() {
-        return contractId;
+    // Getters and Setters
+    public int getId() {
+        return id;
     }
 
-    public void setContractId(int contractId) {
-        this.contractId = contractId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
-    public int getRoomId() {
-        return roomId;
+    public User getUser() {
+        return user;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getCreateAt() {
-        return createAt;
+    
+
+   
+
+    public Motel getMotel() {
+        return motel;
     }
 
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt;
+    public void setMotel(Motel motel) {
+        this.motel = motel;
     }
 
-    public int getMotelId() {
-        return motelId;
-    }
-
-    public void setMotelId(int motelId) {
-        this.motelId = motelId;
-    }
+    
 
     public double getTotalPrice() {
         return totalPrice;
@@ -84,11 +77,11 @@ public class Contract {
         this.paymentStatus = paymentStatus;
     }
 
-    public String getPaymentDate() {
+    public Date getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(String paymentDate) {
+    public void setPaymentDate(Date paymentDate) {
         this.paymentDate = paymentDate;
     }
 
@@ -100,19 +93,11 @@ public class Contract {
         this.typeOfContract = typeOfContract;
     }
 
-    public String getCheckInDate() {
-        return checkInDate;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCheckInDate(String checkInDate) {
-        this.checkInDate = checkInDate;
-    }
-
-    public String getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public void setCheckOutDate(String checkOutDate) {
-        this.checkOutDate = checkOutDate;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 }

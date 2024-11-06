@@ -1,42 +1,52 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 public class Room {
-    private int roomId;
-    private int motelId;
-    private int typeId;
+    private int id;
+    private Motel motel;
+    private RoomType roomType;
 
     // Getters and Setters
-    public int getRoomId() {
-        return roomId;
+    public int getId() {
+        return id;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getMotelId() {
-        return motelId;
+    public Room(int id, Motel motel, RoomType roomType) {
+        this.id = id;
+        this.motel = motel;
+        this.roomType = roomType;
     }
 
-    public void setMotelId(int motelId) {
-        this.motelId = motelId;
+    public Room() {
     }
 
-    public int getTypeId() {
-        return typeId;
+    public RoomType getRoomType() {
+        return roomType;
     }
 
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
     }
+
+    public Motel getMotel() {
+        return motel;
+    }
+
+    public void setMotel(Motel motel) {
+        this.motel = motel;
+    }
+
+  
+
+  
 
     @Override
     public String toString() {
-        return "Room{" + "roomId=" + roomId + ", motelId=" + motelId + ", typeId=" + typeId + '}';
+        return "Room{" + "id=" + id + ", motelId=" + motel + ", roomType=" + roomType + '}';
     }
-    
+
+  
 }

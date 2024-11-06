@@ -54,7 +54,7 @@
                     <div class="row form-group">
                         <div class="col-md-12">
                             <label class="font-weight-bold" for="re-password">Re-Password</label>
-                            <input type="password" value="${re-password}" name="re-password" id="re-password" class="form-control" placeholder="Re-enter Your Password">
+                           <input type="password" value="${re_password}" name="re_password" id="re-password" class="form-control" placeholder="Re-enter Your Password">
                             <small id="rePasswordError" style="color:red; display:none;">Passwords do not match.</small>
                         </div>
                     </div>
