@@ -61,6 +61,12 @@
                         <span>Contract Management</span></a>
                 </li>
                 
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/staff/rent-contact-management">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Rent Contact Management</span></a>
+                </li>
+                
 
 
 

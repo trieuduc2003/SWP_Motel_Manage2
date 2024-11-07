@@ -20,6 +20,7 @@ public class User {
     private String email;
     private String phone;
     private Status status;
+    private String cccd;
 
   
     public Role getRole() {
@@ -89,6 +90,14 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getCccd() {
+        return cccd;
+    }
+
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
     }
 
     @Override

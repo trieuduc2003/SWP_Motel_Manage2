@@ -128,6 +128,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Role</th>
+                                    <th>CCCD</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -142,6 +143,8 @@
                                         <td>${a.email}</td>
                                         <td>${a.phone}</td>
                                         <td>${a.role}</td>
+                                        <td> ${a.cccd}</td>
+
                                         <td>
                                             <span class="
                                                   ${a.status == 'ACTIVE' ? 'badge badge-success' : ''}
@@ -152,7 +155,6 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <!-- Block/Unblock Button with hidden form -->
                                             <form action="user-management" method="POST">
                                                 <input type="hidden" name="userId" value="${a.id}">
                                                 <input type="hidden" name="action" value="${a.status == 'ACTIVE' ? 'BLOCK' : 'UNBLOCK'}">
