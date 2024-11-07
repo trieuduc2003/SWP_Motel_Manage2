@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -64,24 +63,17 @@
                                     </li>
                                     <c:if test="${not empty account}">
                                         <li class="has-children">
-                                            <a href="profileServlet">${account.name}</a>
+                                            <a href="profile">${account.name}</a>
                                             <ul class="dropdown arrow-top">
-                                                <li><a href="/profileServlet">Profile </a></li>
-
-                                                <c:if test="${account.role == 'ADMIN'}">
-                                                    <li><a href="motel?action=list">Manage Motel</a></li>
-                                                    </c:if>
-
-
+                                                <li><a href="#">Change password</a></li>
                                                 <li><a href="logout">Logout</a></li>
                                             </ul>
                                         </li>
                                     </c:if>
-                                    <c:if test="${empty account}">
+                                    <c:if test="${ empty account}">
                                         <li><a href="login">Login</a></li>
                                         <li><a href="register">Register</a></li>
                                         </c:if>
-
 
                                 </ul>
                             </nav>
