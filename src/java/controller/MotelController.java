@@ -21,7 +21,9 @@ import model.Motel;
  */
 @WebServlet(name = "MotelController", urlPatterns = {"/motel"})
 public class MotelController extends HttpServlet {
-private final MotelDAO motelDAO = new MotelDAO();
+
+    private final MotelDAO motelDAO = new MotelDAO();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,7 +41,7 @@ private final MotelDAO motelDAO = new MotelDAO();
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MotelController</title>");            
+            out.println("<title>Servlet MotelController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet MotelController at " + request.getContextPath() + "</h1>");
@@ -58,29 +60,27 @@ private final MotelDAO motelDAO = new MotelDAO();
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String action = request.getParameter("action");
-    String searchTerm = request.getParameter("searchTerm"); // Get search term if provided
-    String discountParam = request.getParameter("haveDiscount"); // Get discount parameter
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        String searchTerm = request.getParameter("searchTerm"); // Get search term if provided
+        String discountParam = request.getParameter("haveDiscount"); // Get discount parameter
 
-    System.out.println("Action: " + action);
+        System.out.println("Action: " + action);
 
-    if ("list".equals(action) || "search".equals(action)) {
-        boolean hasDiscount = "true".equals(discountParam); // Check if 'Have Discount' is selected
-        List<Motel> motels = motelDAO.getAllMotelHaveDiscount(hasDiscount, searchTerm); // Pass search term and discount to method
-        request.setAttribute("motels", motels);
-        request.setAttribute("searchTerm", searchTerm); // Pass search term to the JSP
-        request.setAttribute("haveDiscount", discountParam); // Pass the discount parameter to the JSP
-        request.getRequestDispatcher("motels.jsp").forward(request, response);
-    } else if ("edit".equals(action)) {
-        int motelId = Integer.parseInt(request.getParameter("motelId"));
-        Motel motel = motelDAO.getMotelById(motelId);
-        request.setAttribute("motel", motel);
-        request.getRequestDispatcher("editMotel.jsp").forward(request, response);
+        if ("list".equals(action) || "search".equals(action)) {
+            boolean hasDiscount = "true".equals(discountParam); // Check if 'Have Discount' is selected
+            List<Motel> motels = motelDAO.getAllMotelHaveDiscount(hasDiscount, searchTerm); // Pass search term and discount to method
+            request.setAttribute("motels", motels);
+            request.setAttribute("searchTerm", searchTerm); // Pass search term to the JSP
+            request.setAttribute("haveDiscount", discountParam); // Pass the discount parameter to the JSP
+            request.getRequestDispatcher("motels.jsp").forward(request, response);
+        } else if ("edit".equals(action)) {
+            int motelId = Integer.parseInt(request.getParameter("motelId"));
+            Motel motel = motelDAO.getMotelById(motelId);
+            request.setAttribute("motel", motel);
+            request.getRequestDispatcher("editMotel.jsp").forward(request, response);
+        }
     }
-}
-
-
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -91,7 +91,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         System.out.println("action" + action);
         if ("insert".equals(action)) {
@@ -102,7 +102,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             motel.setCity(request.getParameter("city"));
             motel.setNumberOfRoom(Integer.parseInt(request.getParameter("numberOfRoom")));
             boolean test = motelDAO.insertMotel(motel);
-            System.out.println("sdsdsd"+ test);
+            System.out.println("sdsdsd" + test);
             response.sendRedirect("motel?action=list");
         } else if ("update".equals(action)) {
             Motel motel = new Motel();
