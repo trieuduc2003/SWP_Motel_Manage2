@@ -11,7 +11,10 @@ public class DBContext {
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=motel2"; // Cấu trúc URL cho SQL Server
     private static final String USER = "sa"; // Người dùng SQL Server
     private static final String PASSWORD = "123"; // Mật khẩu của bạn
+<<<<<<< HEAD
 >>>>>>> origin/Hung
+=======
+>>>>>>> origin/QuangAnh267
 
     protected static Connection connection;
 
